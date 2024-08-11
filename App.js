@@ -49,6 +49,24 @@ app.post("/AdminSignIn", (req, res) => {
     ).catch()
 })
 
+app.post("/AddMissingPeople",(req,res)=>{
+    let input=req.body
+    let token=req.headers.token
+    jwt.verify(token,"rescue-app",
+        (error,decoded)=>{
+            if (decoded && decoded.email) {
+                let result = new PeopleModel(input)
+                result.save()
+                res.json({"status":"success"})
+            } else {
+                res.json({"status":"Failed to register"})
+            }
+        }
+    )
+})
+
+
+
 app.listen(8081, () => {
     console.log("server started")
 })
